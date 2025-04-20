@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List,Optional
 
 class PointCreate(BaseModel):
     name: str
@@ -27,3 +27,11 @@ class LoginResponse(BaseModel):
 class LoginSchema(BaseModel):
     username: str
     password: str
+
+class PointUpdate(BaseModel):
+    name: Optional[str] = None
+    geometry: Optional[str] = None
+
+class PolygonUpdate(BaseModel):
+    name: Optional[str] = None
+    geometry: Optional[str] = None

@@ -74,3 +74,21 @@ async def add_multiple_polygons(data: schema.MultiplePolygons, db: Session = Dep
 @app.get("/polygons/", response_model=List[schema.PolygonOut])
 async def get_all_polygons(db: Session = Depends(get_db),user=Depends(AuthHandler().auth_wrapper)):
     return  crud.get_polygons(db)
+@app.put("/points/{point_id}", response_model=schema.PointOut)
+async def update_point(
+    point_id: int,
+    data: schema.PointUpdate,
+    db: Session = Depends(get_db),
+    user=Depends(AuthHandler().auth_wrapper)
+):
+    return crud.update_point(db, point_id, data)
+
+
+@app.put("/polygons/{polygon_id}", response_model=schema.PolygonOut)
+async def update_polygon(
+    polygon_id: int,
+    data: schema.PolygonUpdate,
+    db: Session = Depends(get_db),
+    user=Depends(AuthHandler().auth_wrapper)
+):
+    return crud.update_polygon(db, polygon_id, data)
