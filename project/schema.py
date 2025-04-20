@@ -20,3 +20,10 @@ class MultiplePoints(BaseModel):
 
 class MultiplePolygons(BaseModel):
     polygons: List[PolygonCreate]
+
+class LoginResponse(BaseModel):
+    access_token: str
+    token_type: str
+class LoginSchema(BaseModel):
+    username: str
+    password: str

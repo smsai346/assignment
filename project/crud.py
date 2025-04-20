@@ -4,7 +4,7 @@ from .model import PointData, PolygonData
 from sqlalchemy import func
 from sqlalchemy.exc import SQLAlchemyError
 
-async def create_multiple_points(db: Session, data):
+def create_multiple_points(db: Session, data):
     try:
         # Insert using ORM + SQL function ST_GeomFromText
         for point in data.points:
@@ -14,10 +14,10 @@ async def create_multiple_points(db: Session, data):
                     geometry=func.ST_GeomFromText(point.geometry, 4326)  # 🧠 Converts WKT string into geometry
                 )
             )
-        await db.commit()
+        db.commit()
 
         # Query using ORM and convert geometry to WKT or GeoJSON
-        results = await db.query(
+        results = db.query(
             PointData.id,
             PointData.name,
             func.ST_AsText(PointData.geometry).label("wkt")
@@ -37,7 +37,7 @@ async def create_multiple_points(db: Session, data):
         # Log the error or print a message
         print(f"Error occurred: {str(e)}")
         return {"error": "An error occurred while processing the points."}
-async def create_multiple_polygons(db: Session, data):
+def create_multiple_polygons(db: Session, data):
     try:
         for poly in data.polygons:
             db.add(
@@ -46,8 +46,8 @@ async def create_multiple_polygons(db: Session, data):
                         geometry=func.ST_GeomFromText(poly.geometry, 4326)  # 🧠 Converts WKT string into geometry
                     )
                 )
-        await db.commit()
-        results = await db.query(
+        db.commit()
+        results = db.query(
                 PolygonData.id,
                 PolygonData.name,
                 func.ST_AsText(PolygonData.geometry).label("wkt")
@@ -59,10 +59,10 @@ async def create_multiple_polygons(db: Session, data):
         print(f"Error occurred: {str(e)}")
         return {"error": "An error occurred while processing the points."}
 
-async def get_points(db: Session):
+def get_points(db: Session):
     try:
         # Query to retrieve points from the database
-        result = await db.query(
+        result =  db.query(
             PointData.id,
             PointData.name,
             func.ST_AsText(PointData.geometry).label("geometry")
@@ -76,10 +76,10 @@ async def get_points(db: Session):
         print(f"Error occurred: {str(e)}")
         return {"error": "An error occurred while retrieving the points."}
 
-async def get_polygons(db: Session):
+def get_polygons(db: Session):
     try:
         # Query to retrieve points from the database
-        result = await db.query(
+        result =  db.query(
             PolygonData.id,
             PolygonData.name,
             func.ST_AsText(PolygonData.geometry).label("geometry")
